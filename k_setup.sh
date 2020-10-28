@@ -3,9 +3,9 @@
 # Update hosts file
 echo "[TASK 1] Update /etc/hosts file"
 cat >>/etc/hosts<<EOF
-172.16.16.100 kmaster.example.com kmaster
-172.16.16.101 kworker1.example.com kworker1
-172.16.16.102 kworker2.example.com kworker2
+172.16.16.100 master.example.com master
+172.16.16.101 worker1.example.com worker1
+172.16.16.102 worker2.example.com worker2
 EOF
 
 # Install docker from Docker-ce repository
@@ -66,8 +66,7 @@ systemctl start kubelet >/dev/null 2>&1
 
 # Enable ssh password authentication
 echo "[TASK 11] Enable ssh password authentication"
-sed -i 's/^PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
-systemctl reload sshd
+sed -i 's/^PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config && systemctl reload sshd
 
 # Set Root password
 echo "[TASK 12] Set root password"
