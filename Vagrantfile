@@ -10,10 +10,10 @@ Vagrant.configure(2) do |config|
   # Kubernetes Master Server
   config.vm.define "master" do |master|
     master.vm.box = "centos/7"
-    master.vm.hostname = "master.example.com"
+    master.vm.hostname = "k8smaster.example.com"
     master.vm.network "private_network", ip: "192.168.48.10"
     master.vm.provider "virtualbox" do |v|
-      v.name = "Master"
+      v.name = "k8sMaster"
       v.memory = 2048
       v.cpus = 2
       # Prevent VirtualBox from interfering with host audio stack
@@ -28,10 +28,10 @@ Vagrant.configure(2) do |config|
   (1..NodeCount).each do |i|
     config.vm.define "worker#{i}" do |node|
       node.vm.box = "centos/7"
-      node.vm.hostname = "worker#{i}.example.com"
+      node.vm.hostname = "k8sworker#{i}.example.com"
       node.vm.network "private_network", ip: "192.168.48.1#{i}"
       node.vm.provider "virtualbox" do |v|
-        v.name = "Worker#{i}"
+        v.name = "k8sWorker#{i}"
         v.memory = 1024
         v.cpus = 1
         # Prevent VirtualBox from interfering with host audio stack
