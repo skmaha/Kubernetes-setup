@@ -17,7 +17,7 @@ su - vagrant -c "kubectl create -f https://docs.projectcalico.org/v3.11/manifest
 # Deploy Kubernetes-dashboard
 echo "[Step 4] Deploy Kubernetes-dashboard & dashboard-service account"
 su - vagrant -c "kubectl apply -f https://raw.githubusercontent.com/msunilkumar/Kubernetes-setup/master/dashboard.yaml" 2>/dev/null
-su - vagrant -c "kubectl apply -f https://raw.githubusercontent.com/msunilkumar/Kubernetes-setup/master/sa-dashbord.yaml" 2>/dev/null
+su - vagrant -c "kubectl apply -f https://raw.githubusercontent.com/msunilkumar/Kubernetes-setup/master/sa-dashboard.yaml" 2>/dev/null
 
 # Generate Cluster join command
 echo "[Step 4] Generate and save cluster join command to /joincluster.sh"
