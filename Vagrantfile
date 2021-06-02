@@ -40,5 +40,4 @@ Vagrant.configure(2) do |config|
       node.vm.provision "shell", path: "worker.sh"
     end
   end
-
 end
