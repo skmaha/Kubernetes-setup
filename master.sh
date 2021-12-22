@@ -12,7 +12,7 @@ chown -R vagrant:vagrant /home/vagrant/.kube
 
 # Deploy Calico network
 echo "[Step 3] Deploy Calico network"
-su - vagrant -c "kubectl create -f https://docs.projectcalico.org/v3.11/manifests/calico.yaml" 2>/dev/null
+kubectl --kubeconfig=/etc/kubernetes/admin.conf create -f https://docs.projectcalico.org/v3.18/manifests/calico.yaml 2>/dev/null
 
 # Deploy Kubernetes-dashboard
 echo "[Step 4] Deploy Kubernetes-dashboard & dashboard-service account"

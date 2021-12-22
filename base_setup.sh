@@ -10,7 +10,7 @@ EOF
 
 # Install docker from Docker-ce repository
 echo "[Step 2] Install docker container engine"
-yum install -y -q yum-utils device-mapper-persistent-data lvm2 > /dev/null 2>&1
+yum install -y -q yum-utils  > /dev/null 2>&1
 yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo > /dev/null 2>&1
 yum install -y -q docker-ce >/dev/null 2>&1
 
@@ -18,6 +18,20 @@ yum install -y -q docker-ce >/dev/null 2>&1
 echo "[Step 3] Enable and start docker service"
 systemctl enable docker >/dev/null 2>&1
 systemctl start docker
+
+#Add Docker daemon.json file at location /etc/docker/
+echo "[Step 3.1] Add Docker daemon.json file"
+cat >>/etc/docker/daemon.json<<EOF
+{
+  "exec-opts": ["native.cgroupdriver=systemd"],
+  "log-driver": "json-file",
+  "log-opts": {
+    "max-size": "100m"
+  },
+  "storage-driver": "overlay2"
+}
+EOF
+systemctl restart docker
 
 # Disable SELinux
 echo "[Step 4] Disable SELinux"
