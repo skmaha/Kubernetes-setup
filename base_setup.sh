@@ -58,15 +58,13 @@ swapoff -a
 
 # Add yum repo file for Kubernetes
 echo "[Step 8] Add yum repo file for kubernetes"
-cat >>/etc/yum.repos.d/kubernetes.repo<<EOF
+cat <<EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
 [kubernetes]
 name=Kubernetes
-baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-\$basearch
 enabled=1
 gpgcheck=1
-repo_gpgcheck=1
-gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg
-        https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
 EOF
 
 # Install Kubernetes
@@ -77,6 +75,11 @@ yum install -y -q kubeadm kubelet kubectl >/dev/null 2>&1
 echo "[Step 10] Enable and start kubelet service"
 systemctl enable kubelet >/dev/null 2>&1
 systemctl start kubelet >/dev/null 2>&1
+
+#Remove containerd if kubectl fails to start.
+echo "[Step 10.1] Remove /etc/containerd/config.toml file if exists"
+sudo rm -rf /etc/containerd/config.toml
+sudo systemctl restart containerd
 
 # Enable ssh password authentication
 echo "[Step 11] Enable ssh password authentication"
