@@ -9,9 +9,9 @@ Vagrant.configure(2) do |config|
 
   # Kubernetes Master Server
   config.vm.define "master" do |master|
-    master.vm.box = "centos/7"
+    master.vm.box = "generic/centos7"
     master.vm.hostname = "k8smaster.example.com"
-    master.vm.network "private_network", ip: "192.168.48.10"
+    master.vm.network "private_network", ip: "192.168.56.10"
     master.vm.provider "virtualbox" do |v|
       v.name = "k8sMaster"
       v.memory = 2048
@@ -29,7 +29,7 @@ Vagrant.configure(2) do |config|
     config.vm.define "worker#{i}" do |node|
       node.vm.box = "centos/7"
       node.vm.hostname = "k8sworker#{i}.example.com"
-      node.vm.network "private_network", ip: "192.168.48.1#{i}"
+      node.vm.network "private_network", ip: "192.168.56.1#{i}"
       node.vm.provider "virtualbox" do |v|
         v.name = "k8sWorker#{i}"
         v.memory = 1024

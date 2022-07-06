@@ -3,16 +3,20 @@
 # Update hosts file
 echo "[Step 1] Update /etc/hosts file"
 cat >>/etc/hosts<<EOF
-192.168.48.10 k8smaster.example.com k8smaster
-192.168.48.11 k8sworker1.example.com k8sworker1
-192.168.48.12 k8sworker2.example.com k8sworker2
+192.168.56.10 k8smaster.example.com k8smaster
+192.168.56.11 k8sworker1.example.com k8sworker1
+192.168.56.12 k8sworker2.example.com k8sworker2
 EOF
+
+#install extra packages
+echo "[Step 1-1] install extra packages"
+yum install -y wget vim  epel-release ansible >/dev/null 2>&1
 
 # Install docker from Docker-ce repository
 echo "[Step 2] Install docker container engine"
 yum install -y -q yum-utils  > /dev/null 2>&1
 yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo > /dev/null 2>&1
-yum install -y -q docker-ce >/dev/null 2>&1
+yum install -y -q docker-ce docker-ce-cli containerd.io docker-compose-plugin >/dev/null 2>&1
 
 # Enable docker service
 echo "[Step 3] Enable and start docker service"
@@ -56,6 +60,11 @@ echo "[Step 7] Disable and turn off SWAP"
 sed -i '/swap/d' /etc/fstab
 swapoff -a
 
+# Set SELinux in permissive mode (effectively disabling it)
+sudo setenforce 0
+sudo sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config >/dev/null 2>&1
+
+
 # Add yum repo file for Kubernetes
 echo "[Step 8] Add yum repo file for kubernetes"
 cat <<EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
@@ -69,15 +78,16 @@ EOF
 
 # Install Kubernetes
 echo "[Step 9] Install Kubernetes (kubeadm, kubelet and kubectl)"
-yum install -y -q kubeadm kubelet kubectl >/dev/null 2>&1
+sudo yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes >/dev/null 2>&1
+
 
 # Start and Enable kubelet service
 echo "[Step 10] Enable and start kubelet service"
-systemctl enable kubelet >/dev/null 2>&1
-systemctl start kubelet >/dev/null 2>&1
+sudo systemctl enable --now kubelet >/dev/null 2>&1
+sudo systemctl start kubelet >/dev/null 2>&1
 
-#Remove containerd if kubectl fails to start.
-echo "[Step 10.1] Remove /etc/containerd/config.toml file if exists"
+#Remove containerd if there was an issue
+echo "[Step 10-1] Remove /etc/containerd/config.toml file"
 sudo rm -rf /etc/containerd/config.toml
 sudo systemctl restart containerd
 
@@ -87,11 +97,7 @@ sed -i 's/^PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_
 
 # Set Root password
 echo "[Step 12] Set root password"
-echo "kubeadmin" | passwd --stdin root >/dev/null 2>&1
+echo "kubeadmin" | passwd --stdin root
 
 # Update vagrant user's bashrc file
 echo "export TERM=xterm" >> /etc/bashrc
-
-#install extra packages
-echo "[Step 13] install extra packages"
-yum install -y wget vim  epel-release ansible >/dev/null 2>&1
