@@ -16,3 +16,14 @@ subjects:
 - kind: ServiceAccount
   name: dashboard-admin
   namespace: kubernetes-dashboard
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  labels:
+    k8s-app: dashboard-admin
+  name: kdashboard-admin
+  namespace: kubernetes-dashboard
+type: Opaque
+data:
+  csrf: ""
