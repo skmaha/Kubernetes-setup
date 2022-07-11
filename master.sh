@@ -21,7 +21,7 @@ su - vagrant -c "kubectl apply -f https://raw.githubusercontent.com/msunilkumar/
 
 # Create dashboard-admin token
 echo "[Step 5] Create secret token for dashboard access"
-kubectl -n kubernetes-dashboard create token dashboard-admin >>/home/vagrant/dashboard-admin.txt
+sudo kubectl -n kubernetes-dashboard create token dashboard-admin >>/home/vagrant/dashboard-admin.txt
 
 # Create sample nginx and httpd deplyments
 su - vagrant -c "kubectl apply -f https://raw.githubusercontent.com/sunil4356/Kubernetes-setup/master/httpd.yaml"
