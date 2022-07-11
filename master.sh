@@ -21,8 +21,11 @@ su - vagrant -c "kubectl apply -f https://raw.githubusercontent.com/msunilkumar/
 
 # Create dashboard-admin token
 echo "[Step 5] Create secret token for dashboard access"
-kubectl -n kubernetes-dashboard create token dashboard-admin >/home/vagrant/dashboard-admin.token
+kubectl -n kubernetes-dashboard create token dashboard-admin >>/home/vagrant/dashboard-admin.txt
 
+# Create sample nginx and httpd deplyments
+su - vagrant -c "kubectl apply -f https://raw.githubusercontent.com/sunil4356/Kubernetes-setup/master/httpd.yaml"
+su - vagrant -c "kubectl apply -f https://raw.githubusercontent.com/sunil4356/Kubernetes-setup/master/nginx.yaml"
 # Generate Cluster join command
 echo "[Step 6] Generate and save cluster join command to /joincluster.sh"
 kubeadm token create --print-join-command > /joincluster.sh

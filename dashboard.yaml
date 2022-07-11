@@ -188,9 +188,12 @@ spec:
       labels:
         k8s-app: kubernetes-dashboard
     spec:
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: kubernetes-dashboard
-          image: kubernetesui/dashboard:v2.0.4
+          image: kubernetesui/dashboard:v2.5.0
           imagePullPolicy: Always
           ports:
             - containerPort: 8443
@@ -236,6 +239,22 @@ spec:
 
 ---
 
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+    k8s-app: dashboard-metrics-scraper
+  name: dashboard-metrics-scraper
+  namespace: kubernetes-dashboard
+spec:
+  ports:
+    - port: 8000
+      targetPort: 8000
+  selector:
+    k8s-app: dashboard-metrics-scraper
+
+---
+
 kind: Deployment
 apiVersion: apps/v1
 metadata:
@@ -253,12 +272,13 @@ spec:
     metadata:
       labels:
         k8s-app: dashboard-metrics-scraper
-      annotations:
-        seccomp.security.alpha.kubernetes.io/pod: 'runtime/default'
     spec:
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: dashboard-metrics-scraper
-          image: kubernetesui/metrics-scraper:v1.0.4
+          image: kubernetesui/metrics-scraper:v1.0.7
           ports:
             - containerPort: 8000
               protocol: TCP
