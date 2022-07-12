@@ -18,3 +18,4 @@ Setup Kubernetes on Centos7
 5. kubectl describe deployment deployment-name
 6. kubectl describe po pod-name
 7. kubectl describe svc svc-name
+8. kubectl cp file-name pod-name:/path/to/file/location/
