@@ -29,3 +29,4 @@ su - vagrant -c "kubectl apply -f https://raw.githubusercontent.com/sunil4356/Ku
 # Generate Cluster join command
 echo "[Step 6] Generate and save cluster join command to /joincluster.sh"
 kubeadm token create --print-join-command > /joincluster.sh
+sudo chown vagrant: /joincluster.sh
