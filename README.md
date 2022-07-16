@@ -1,9 +1,9 @@
 # Kubernetes-setup
-Setup Kubernetes on Centos7
+Setup Kubernetes on ubuntu-20.04-arm64
 ## Pre-requisites
 1. Vagrant installed
-2. Oracle Virtual Box installed
-3. Create virtual network connection on VirtualBox
+2. Parallels Desktop Pro installed
+3. Create NEW hostonly network connection on Parallels Desktop
 4. Update the Vagrant file with IP Address as per the network connection created.
 
 5. clone the repo
