@@ -2,13 +2,13 @@
 
 # Initialize Kubernetes
 echo "[Step 1] Initialize Kubernetes Cluster"
-kubeadm init --apiserver-advertise-address=192.168.56.10 --pod-network-cidr=10.244.0.0/16 >> /root/kubeinit.log 2>/dev/null
+kubeadm init --apiserver-advertise-address=10.37.129.10 --pod-network-cidr=10.244.0.0/16 >> /root/kubeinit.log 2>/dev/null
 
 # Copy Kube admin config
 echo "[Step 2] Copy kube admin config to Vagrant user .kube directory"
-mkdir -p /home/vagrant/.kube
-cp /etc/kubernetes/admin.conf /home/vagrant/.kube/config
-chown -R vagrant:vagrant /home/vagrant/.kube
+sudo mkdir -p /home/vagrant/.kube
+sudo cp /etc/kubernetes/admin.conf /home/vagrant/.kube/config
+sudo chown -R vagrant:vagrant /home/vagrant/.kube
 
 # Deploy Calico network
 echo "[Step 3] Deploy Calico network"
