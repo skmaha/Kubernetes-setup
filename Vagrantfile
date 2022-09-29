@@ -22,7 +22,7 @@ Vagrant.configure(2) do |config|
     master.vm.provision "shell", path: "master.sh"
   end
 
-  NodeCount = 1
+  NodeCount = 2
 
   # Kubernetes Worker Nodes
   (1..NodeCount).each do |i|
