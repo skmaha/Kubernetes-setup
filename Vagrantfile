@@ -4,6 +4,19 @@
 ENV['VAGRANT_NO_PARALLEL'] = 'yes'
 
 Vagrant.configure(2) do |config|
+  config.vm.define "jenkins" do |jenkins|
+    jenkins.vm.box = "generic/centos7"
+    jenkins.vm.hostname = "jenkins.example.com"
+    jenkins.vm.network "private_network", ip: "192.168.56.20"
+    jenkins.vm.provider "virtualbox" do |v|
+      v.name = "jenkins"
+      v.memory = 2048
+      v.cpus = 2
+      # Prevent VirtualBox from interfering with host audio stack
+      v.customize ["modifyvm", :id, "--audio", "none"]
+    end
+    jenkins.vm.provision "shell", path: "install_jenkins.sh"
+  end
 
   config.vm.provision "shell", path: "base_setup.sh"
 
